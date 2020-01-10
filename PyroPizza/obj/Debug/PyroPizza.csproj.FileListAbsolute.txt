@@ -1,0 +1,7 @@
+T:\Projects\VisualStudio\PyroPizza\PyroPizza\bin\Debug\PyroPizza.exe
+T:\Projects\VisualStudio\PyroPizza\PyroPizza\bin\Debug\PyroPizza.pdb
+T:\Projects\VisualStudio\PyroPizza\PyroPizza\obj\Debug\PyroPizza.csprojAssemblyReference.cache
+T:\Projects\VisualStudio\PyroPizza\PyroPizza\obj\Debug\PyroPizza.Properties.Resources.resources
+T:\Projects\VisualStudio\PyroPizza\PyroPizza\obj\Debug\PyroPizza.csproj.GenerateResource.cache
+T:\Projects\VisualStudio\PyroPizza\PyroPizza\obj\Debug\PyroPizza.exe
+T:\Projects\VisualStudio\PyroPizza\PyroPizza\obj\Debug\PyroPizza.pdb
