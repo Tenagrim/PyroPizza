@@ -5,3 +5,4 @@ T:\Projects\VisualStudio\PyroPizza\PyroPizza\obj\Debug\PyroPizza.Properties.Reso
 T:\Projects\VisualStudio\PyroPizza\PyroPizza\obj\Debug\PyroPizza.csproj.GenerateResource.cache
 T:\Projects\VisualStudio\PyroPizza\PyroPizza\obj\Debug\PyroPizza.exe
 T:\Projects\VisualStudio\PyroPizza\PyroPizza\obj\Debug\PyroPizza.pdb
+T:\Projects\VisualStudio\PyroPizza\PyroPizza\obj\Debug\PyroPizza.Form1.resources

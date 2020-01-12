@@ -15,5 +15,15 @@ namespace PyroPizza
         {
             InitializeComponent();
         }
+        private Pizzery PyroPizza = new Pizzery();
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Action1();
+        }
+        private void Action1()
+        {
+            PyroPizza.storage.Content.Add(new Product());
+        }
     }
 }
