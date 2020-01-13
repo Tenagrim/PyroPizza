@@ -5,19 +5,22 @@ using System.Text;
 
 namespace PyroPizza
 {
+    public enum orderStatus { accepted, inProgress, prepared, inDelivery, done, cancelled }
     [Serializable]
     class Order
     {
-        public int ID { get;  }
-        public int AverCost { get; }
+        public int ID { get; }
+        public double AverCost { get; }
         public List<MenuPosition> Content { get; }
+        public string Status { get; set; }
+        public bool delivery { get; set; }
         public Order()
         {
-        
+
         }
         public Order(List<MenuPosition> cont)
         {
-            int aCost = 0;
+            double aCost = 0;
             foreach (var i in cont)
                 aCost += i.Cost;
             AverCost = aCost;

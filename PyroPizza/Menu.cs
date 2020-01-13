@@ -8,14 +8,18 @@ namespace PyroPizza
     [Serializable]
     class Menu
     {
-       public List<MenuPosition> Content { get; set;}
+       public List<MenuPosition> Content { get;}
         public Menu()
         {
             Content = new List<MenuPosition>();
         }
-        public void Add()
+        public void Add(MenuPosition menuPosition)
         {
-        
+            Content.Add(menuPosition);
+        }
+        public void RemoveAt(int index)
+        {
+            Content.RemoveAt(index);
         }
     }
 }

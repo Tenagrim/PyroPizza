@@ -8,12 +8,12 @@ namespace PyroPizza
     class Product
     {
         public string Name { get; set; }
-        public int Cost { get; set; }
+        public double Cost { get; set; }
         public DateTime AcceptanceDate { get; set; }
         public DateTime ManufactureDate { get; set; }
         public int ShelfLife { get; set; }
         public int CountOnStorage { get { return count; } }
-        private int count;
+        protected int count;
         public Product()
         {
             Name = "product";

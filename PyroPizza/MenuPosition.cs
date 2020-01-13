@@ -8,9 +8,9 @@ namespace PyroPizza
     [Serializable]
     class MenuPosition
     {
+        public static Random rand = new Random(0);
         public string Name { get; set; }
-        public int Cost { get; set; }
-
+        public double Cost { get; set; }
         public override int GetHashCode()
         {
             return Name.GetHashCode() + Cost.GetHashCode();
@@ -24,5 +24,6 @@ namespace PyroPizza
                 return true;
             else return false;
         }
+
     }
 }

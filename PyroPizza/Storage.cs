@@ -13,6 +13,7 @@ namespace PyroPizza
         public Storage()
         {
             Content = new List<Product>();
+
         }
         public void Add(Product product)         
         {
