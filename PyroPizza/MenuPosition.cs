@@ -11,6 +11,8 @@ namespace PyroPizza
         public static Random rand = new Random(0);
         public string Name { get; set; }
         public double Cost { get; set; }
+        private int index;
+        public int Index { get { return index; } }
         public override int GetHashCode()
         {
             return Name.GetHashCode() + Cost.GetHashCode();
@@ -23,6 +25,10 @@ namespace PyroPizza
             else if (ai.Cost == Cost && ai.Name == Name)
                 return true;
             else return false;
+        }
+        public void SetIndex(int i)
+        {
+            index = i;
         }
 
     }

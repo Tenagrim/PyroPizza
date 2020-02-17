@@ -32,17 +32,17 @@ namespace PyroPizza
             ShelfLife = 0;
         }
 
-        public Ingredient(string name, double cost, int shelfLife)
+        public Ingredient(string name, double cost, int cou)
         {
 
             Name = name;
             Cost = cost;
-            count = 0;
+            count = cou;
 
             ManufactureDate = DateTime.MinValue;
             AcceptanceDate = DateTime.MinValue;
 
-            ShelfLife = shelfLife;
+            ShelfLife = 10;
 
         }
         public Ingredient(string name, double cost)
@@ -56,7 +56,11 @@ namespace PyroPizza
             AcceptanceDate = DateTime.MinValue;
 
             ShelfLife = 30;
+        }
 
+        public Ingredient Clone()
+        {
+            return new Ingredient(Name, Cost, count);
         }
     }
 }

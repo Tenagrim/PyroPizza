@@ -61,6 +61,8 @@ namespace PyroPizza
             }
             else
             {
+                if(textBox6.Text=="" || textBox4.Text == "" || textBox5.Text == "" ) { ShowError("Заполните поля"); return; }
+
                 if (!CheckIngrFields()) return;
                 double cost;
                 if (!Double.TryParse(textBox4.Text, out cost)) { ShowError("Неверно введена стоимость"); return; }
@@ -111,23 +113,25 @@ namespace PyroPizza
 
         private void button2_Click(object sender, EventArgs e)
         {
-            if (!CheckFields()) return;
             double cost;
             if (!Double.TryParse(textBox2.Text, out cost)) { ShowError("Стоимость введена неверно"); return; }
 
             if (radioButton1.Checked)
             {
+                if (!CheckFields()) return;
                 newPos = GeNewPizza(cost);
             }
             else if (radioButton2.Checked)
             {
                 if (textBox7.Text == "" ) { ShowError("Введите объем"); return; }
+                if (textBox1.Text == "") { ShowError("Введите название"); return; }
                 double volume;
-                if(Double.TryParse(textBox7.Text, out volume)) { ShowError("Объем введен неверно"); return; }
+                if(!Double.TryParse(textBox7.Text, out volume)) { ShowError("Объем введен неверно"); return; }
                 newPos = GeNewDrink(cost, volume);
             }
             else if (radioButton3.Checked) 
             {
+                if (!CheckFields()) return;
                 newPos = GeNewOther(cost);
             }
 
@@ -210,6 +214,11 @@ namespace PyroPizza
             label3.Visible = true;
             label5.Visible = true;
             textBox3.Visible = true;
+        }
+
+        private void textBox4_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            _KeyPress(sender, e);
         }
     }
 }

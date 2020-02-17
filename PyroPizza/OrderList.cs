@@ -14,5 +14,10 @@ namespace PyroPizza
         {
             orders = new List<Order>();
         }
+        public void Add(Order o)
+        {
+            o.SetIndex(orders.Count);
+            orders.Add(o);
+        }
     }
 }
