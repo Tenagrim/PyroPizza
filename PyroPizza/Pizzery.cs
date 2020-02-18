@@ -13,6 +13,7 @@ namespace PyroPizza
         public Menu menu;
         public Journal journal;
         public OrderList orderList;
+        public Wallet wallet;
         public Pizzery()
         {
             staff = new Staff();
@@ -20,6 +21,7 @@ namespace PyroPizza
             menu = new Menu();
             journal = new Journal();
             orderList = new OrderList();
+            wallet = new Wallet();
         }
         public List<Ingredient> GetKnownIngredients()
         {
@@ -32,6 +34,20 @@ namespace PyroPizza
                     res.Add(ai);
             }
             return res;
+        }
+
+        public void BuyRequestedOnStorage(int count)
+        {
+            wallet.Spend(storage.AppendAllQeue(count));
+        }
+        public void BuyRequestedOnStorage()
+        {
+            wallet.Spend(storage.AppendAllQeue());
+        }
+        public void AcceptOrder(Order ord)
+        {
+            orderList.Add(ord);
+            wallet.Income(ord.Cost);
         }
     }
 }

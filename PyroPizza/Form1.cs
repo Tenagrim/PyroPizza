@@ -27,6 +27,7 @@ namespace PyroPizza
             LoadIndexes(PyroPizza.menu);
             textBox8.Text = PyroPizza.menu.deliveryCost.ToString();
             curOrder.deliveryCost = PyroPizza.menu.deliveryCost;
+            comboBox4.SelectedIndex = 0;
         }
 
         Pizzery PyroPizza = new Pizzery();
@@ -398,10 +399,12 @@ namespace PyroPizza
 
             curOrder.AppendWorker(GetWorker(PyroPizza, GetCashierInd((string)comboBox1.SelectedItem)));
             curOrder.SetStatus("Выполняется");
-            PyroPizza.orderList.Add(curOrder);
+            PyroPizza.AcceptOrder(curOrder);
             curOrder = new Order();
             curOrder.deliveryCost = PyroPizza.menu.deliveryCost;
             ClearAcceptance();
+            comboBox4.SelectedIndex = -1;
+            comboBox4.SelectedIndex = 0;
         }
 
         private void textBox8_KeyPress(object sender, KeyPressEventArgs e)
@@ -448,7 +451,7 @@ namespace PyroPizza
             string res = "";
             List<Product> ls = PyroPizza.storage.GetMissingProgucts(o);
             foreach (var i in ls)
-                res += i.Name +" "+ i.CountOnStorage + " шт.\n";
+                res += i.Name + " " + i.CountOnStorage + " шт.\n";
             return res;
         }
 
@@ -460,6 +463,7 @@ namespace PyroPizza
         }
         private void listBox5_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (listBox5.SelectedIndex == -1) { listBox6.Items.Clear(); listBox7.Items.Clear(); return; }
             ShowOrder((string)listBox5.SelectedItem);
         }
 
@@ -497,6 +501,7 @@ namespace PyroPizza
         }
         private void listBox6_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if(listBox6.SelectedIndex!=-1)
             ShowPosition((string)listBox5.SelectedItem, listBox6.SelectedIndex);
         }
 
@@ -512,8 +517,33 @@ namespace PyroPizza
         private void PrepareOrder()
         {
             if (listBox5.SelectedIndex == -1) { ShowError("Выберите заказ для приготовления"); return; }
+            if (comboBox2.SelectedIndex == -1) { ShowError("Для приготовления заказа нужен повар"); return; }
             Order o = GetOrder((string)listBox5.SelectedItem);
-            List<Product> ls = PyroPizza.storage.GetMissingProgucts(o);
+            if (o.Status != "Выполняется") { ShowError("Данный заказ не может быть приготовлен"); return; }
+            bool enough = false;
+            try
+            {
+                PyroPizza.storage.SpendByOrder(o);
+                enough = true;
+            }
+            catch (ArgumentException e)
+            {
+                ShowError(e.Message);
+            }
+            if (enough)
+            {
+                o.AppendWorker(GetWorker(PyroPizza, GetCashierInd((string)comboBox2.SelectedItem)));
+                o.SetStatus("Приготовлен");
+                ShowMsg("Заказ приготовлен");
+                UpdateOrderList();
+            }
+            // List<Product> ls = PyroPizza.storage.GetMissingProgucts(o);
+        }
+        private void UpdateOrderList()
+        {
+            int tmp = comboBox4.SelectedIndex;
+            comboBox4.SelectedIndex = -1;
+            comboBox4.SelectedIndex = tmp;
         }
         private void button17_Click(object sender, EventArgs e)
         {
@@ -524,7 +554,7 @@ namespace PyroPizza
             listBox9.Items.Clear();
             foreach (var i in PyroPizza.storage.ProductQuery)
             {
-                listBox9.Items.Add(i.Name+" " +i.CountOnStorage + " шт.");
+                listBox9.Items.Add(i.Name + " " + i.CountOnStorage + " шт.");
             }
         }
         private void button18_Click(object sender, EventArgs e)
@@ -542,8 +572,8 @@ namespace PyroPizza
         private void ShowProduct(Product p)
         {
             textBox9.Text = p.Name;
-            textBox10.Text = p.Cost.ToString()+"р.";
-            textBox11.Text = p.CountOnStorage.ToString()+ "шт.";
+            textBox10.Text = p.Cost.ToString() + "р.";
+            textBox11.Text = p.CountOnStorage.ToString() + "шт.";
         }
 
         private void listBox8_SelectedIndexChanged(object sender, EventArgs e)
@@ -561,9 +591,9 @@ namespace PyroPizza
 
         private void button20_Click(object sender, EventArgs e)
         {
-            if (textBox12.Text == "") { ShowError("Введите количество");return; }
-            PyroPizza.storage.AppendAllQeue(Int32.Parse(textBox12.Text));
-           // listBox9.Items.Clear();
+            if (textBox12.Text == "")
+            { PyroPizza.BuyRequestedOnStorage(); }
+            else { PyroPizza.BuyRequestedOnStorage((Int32.Parse(textBox12.Text))); }
             UpdateStorListbox();
             UpdateProdQueqe();
         }
@@ -576,7 +606,142 @@ namespace PyroPizza
 
         private void textBox13_KeyPress(object sender, KeyPressEventArgs e)
         {
-            _KeyPress(sender,e);
+            _KeyPress(sender, e);
+        }
+
+        private void button14_Click(object sender, EventArgs e)
+        {
+            listBox5.Items.Clear();
+            var selected = from p in PyroPizza.orderList.orders
+                           where p.Status == "Выполняется"
+                           select p;
+            foreach (var i in selected)
+                listBox5.Items.Add(i.ToString());
+
+        }
+
+        private void button27_Click(object sender, EventArgs e)
+        {
+            listBox5.Items.Clear();
+            var selected = from p in PyroPizza.orderList.orders
+                           where p.Status == "Приготовлен"
+                           select p;
+            foreach (var i in selected)
+                listBox5.Items.Add(i.ToString());
+        }
+
+        private void button15_Click(object sender, EventArgs e)
+        {
+            listBox5.Items.Clear();
+            var selected = from p in PyroPizza.orderList.orders
+                           where p.Status == "Доставляется"
+                           select p;
+            foreach (var i in selected)
+                listBox5.Items.Add(i.ToString());
+        }
+
+        private void button16_Click(object sender, EventArgs e)
+        {
+            listBox5.Items.Clear();
+            var selected = from p in PyroPizza.orderList.orders
+                           where p.Status == "Выполнен"
+                           select p;
+            foreach (var i in selected)
+                listBox5.Items.Add(i.ToString());
+        }
+
+        private void comboBox3_Click(object sender, EventArgs e)
+        {
+            comboBox3.Items.Clear();
+            var select = from p in PyroPizza.staff.Workers
+                         where p.Position == "курьер"
+                         select p;
+            foreach (var i in select)
+                comboBox3.Items.Add(i.Name + " (" + i.Index + ")");
+        }
+
+        private void button28_Click(object sender, EventArgs e)
+        {
+            if (listBox10.SelectedIndex == -1) { ShowError("Выберите заказ для доставки"); return; }
+            if (comboBox3.SelectedIndex == -1) { ShowError("Для доставки нужен курьер"); return; }
+            Order o = GetOrder((string)listBox10.SelectedItem);
+            if (o.Status != "Приготовлен") { ShowError("Данный заказ не может быть доставлен"); return; }
+            if (!o.delivery) { ShowError("Данный заказ не нуждается в доставке"); return; }
+
+            o.AppendWorker(GetWorker(PyroPizza, GetCashierInd((string)comboBox3.SelectedItem)));
+            o.SetStatus("Выполнен");
+            ShowMsg("Заказ доставлен");
+            UpdateOrderList();
+        }
+
+        private void button29_Click(object sender, EventArgs e)
+        {
+            if (listBox5.SelectedIndex == -1) { ShowError("Выберите заказ для выдачи"); return; }
+            Order o = GetOrder((string)listBox5.SelectedItem);
+            if (o.Status != "Приготовлен") { ShowError("Данный заказ не может быть доставлен"); return; }
+            if (o.delivery) { ShowError("Данный заказ нуждается в доставке"); return; }
+            o.SetStatus("Выполнен");
+            ShowMsg("Заказ выполнен");
+            UpdateOrderList();
+        }
+
+        private void button15_Click_1(object sender, EventArgs e)
+        {
+            listBox10.Items.Clear();
+            var selected = from p in PyroPizza.orderList.orders
+                           where p.Status == "Приготовлен"
+                           where p.delivery == true
+                           select p;
+            foreach (var i in selected)
+                listBox10.Items.Add(i.ToString());
+        }
+
+        private void comboBox4_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch (comboBox4.SelectedIndex)
+            {
+                case 0:
+                    listBox5.Items.Clear();
+                    foreach (var i in PyroPizza.orderList.orders)
+                    {
+                        listBox5.Items.Add(i.ToString());
+                    }
+                    listBox6.Items.Clear();
+                    listBox7.Items.Clear();
+                    break;
+                case 1:
+
+                    listBox5.Items.Clear();
+                    var selected = from p in PyroPizza.orderList.orders
+                                   where p.Status == "Выполняется"
+                                   select p;
+                    foreach (var i in selected)
+                        listBox5.Items.Add(i.ToString());
+                    listBox6.Items.Clear();
+                    listBox7.Items.Clear();
+                    break;
+                case 2:
+                    listBox5.Items.Clear();
+                    var selected2 = from p in PyroPizza.orderList.orders
+                                   where p.Status == "Приготовлен"
+                                   select p;
+                    foreach (var i in selected2)
+                        listBox5.Items.Add(i.ToString());
+                    listBox6.Items.Clear();
+                    listBox7.Items.Clear();
+                    break;
+                case 3:
+                    listBox5.Items.Clear();
+                    var selected3 = from p in PyroPizza.orderList.orders
+                                   where p.Status == "Выполнен"
+                                   select p;
+                    foreach (var i in selected3)
+                        listBox5.Items.Add(i.ToString());
+                    listBox6.Items.Clear();
+                    listBox7.Items.Clear();
+                    break;
+
+            }
         }
     }
 }

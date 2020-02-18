@@ -12,14 +12,15 @@ namespace PyroPizza
         public static string posList = "курьер,повар,кассир";
         public string Name { get; set; }
         public string Position { get; set; }
-        public int OrderCount { get; set; }
+        public int OrderCount { get { return orderCount; } }
         private int index;
+        private int orderCount;
         public int Index { get { return index; } }
         public Worker()
         {
             Name = RandName();
             Position = RandPos();
-            OrderCount = 0;
+            orderCount = 0;
         }
         private string RandName()
         {
@@ -34,6 +35,10 @@ namespace PyroPizza
         public void SetIndex(int i)
         {
             index = i;
+        }
+        public void AppendOrder()
+        {
+            orderCount++;
         }
     }
 }

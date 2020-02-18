@@ -22,6 +22,11 @@ namespace PyroPizza
             {
                 if (!ProductQuery.Contains(i))
                     productQuery.Add(i);
+                else
+                {
+                    Product ai = productQuery.Find(p => p.Name == i.Name);
+                    ai.SetCount( ai.CountOnStorage+ i.CountOnStorage);
+                }
             }
         }
         public void PrepareOrd(Order o)
@@ -45,7 +50,7 @@ namespace PyroPizza
             }
             else
             {
-
+                ai.Append(product.CountOnStorage);
             }
         }
         private void AppQ(Product p, List<Product> ls)
@@ -118,8 +123,8 @@ namespace PyroPizza
                 int t = prod.CountOnStorage;
                 prod.SetCount(co);
                 Ingredient tpi = prod as Ingredient;
-                if(tpi != null)
-                Content.Add((Ingredient)tpi.Clone());
+                if (tpi != null)
+                    Content.Add((Ingredient)tpi.Clone());
                 else
                     Content.Add((Product)prod.Clone());
                 prod.SetCount(t - co);
@@ -130,16 +135,60 @@ namespace PyroPizza
                 tmp.Append(co);
                 prod.SetCount(prod.CountOnStorage - co);
             }
-                
+
         }
 
-        public void AppendAllQeue(int count)
+        public void SpendByOrder(Order ord)
         {
+            List<Product> check = GetMissingProgucts(ord);
+            if (check.Count != 0)
+            {
+                string str = "";
+                foreach (var i in check)
+                    str += i.Name + ", ";
+                throw new ArgumentException("Недостаточно следующих продуктов на складе: " + str);
+            }
+
+            List<Product> allProds = GetProducts(ord);
+            List<Product> allProdsT = GetStorageTickets(allProds);
+            for (int i = 0; i < allProdsT.Count; i++ )
+            {
+                allProdsT[i].Spend(allProds[i].CountOnStorage);
+            }
+        }
+
+        private List<Product> GetStorageTickets(List<Product> ls)
+        {
+            List<Product> res = new List<Product>();
+            foreach (var i in ls)
+            {
+                Product ai = Content.Find(p => p.Name == i.Name);
+                if (ai == null) { throw new ArgumentException("Не хватает товара на складе "+i.Name); }
+                res.Add(ai);
+            }
+            return res;
+        }
+        public double AppendAllQeue(int count)
+        {
+            double cost = 0;
             foreach (var i in ProductQuery)
             {
-                Append(i, count);
+                    cost += i.Cost * count;
+                    Append(i, count);
             }
             ClearQueue();
+            return cost;
+        }
+        public double AppendAllQeue()
+        {
+            double cost = 0;
+            foreach (var i in ProductQuery)
+            {
+                cost += i.Cost * i.CountOnStorage;
+                Append(i, i.CountOnStorage);
+            }
+            ClearQueue();
+            return cost;
         }
         private void ClearQueue()
         {

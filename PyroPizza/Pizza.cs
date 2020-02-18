@@ -8,6 +8,7 @@ namespace PyroPizza
     [Serializable]
     class Pizza : MenuPosition
     {
+        public static string rNames = "Маргарита,Маринара,Четыре сезона,Карбонара,Пицца с морепродуктами,Четыре сыра,Крудо,Неаполетано,Пицца по-апулийски,Монтанара,Эмилиана,Римская пицца,Фермерская пицца,Скьяччата,Пицца с прошутто,Пицца “Американо,Пицца с прошутто и грибами,Пицца Папайя,Сардиния,Пицца с тунцом";
         public int RequiredTime { get; set; }
         public List<Ingredient> Ingredients { get; set; }
         public double GetAverCost
@@ -29,7 +30,7 @@ namespace PyroPizza
         }
         public Pizza()
         {
-            Name = "Новая пицца";
+            Name = rName();
             Cost = 230;
             Ingredients = new List<Ingredient>();
             Ingredients.Add(new Ingredient("Тесто тонкое", 43.6, 30));
@@ -48,6 +49,11 @@ namespace PyroPizza
             if (delivery)
                 Ingredients.Add(new Ingredient("Коробка для пиццы", 20.3, 30));
             RequiredTime = 20;
+        }
+        private string rName()
+        {
+            string[] tmp = rNames.Split(',');
+            return tmp[rand.Next(0, tmp.Length)];
         }
     }
 }

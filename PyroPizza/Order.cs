@@ -55,6 +55,7 @@ namespace PyroPizza
         public void AppendWorker(Worker w)
         {
             WorkersInvolved.Add(w);
+            w.AppendOrder();
         }
         public void SetIndex(int i)
         {
@@ -68,9 +69,10 @@ namespace PyroPizza
         {
             string str = "";
 
-            str += index + " " + Cost+"p. ";
-            str += Content.First().Name + " ";
-            if (delivery) str += "Доставка ";
+            str += index + " " + Cost+"p. | ";
+            str += Content.First().Name + " | ";
+            str += Status + " |";
+            if (delivery) str += " Доставка ";
 
             return str;
         }
