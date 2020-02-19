@@ -5,6 +5,7 @@ using System.Text;
 
 namespace PyroPizza
 {
+    [Serializable]
     class Worker
     {
         private static Random rand = new Random();
@@ -20,6 +21,12 @@ namespace PyroPizza
         {
             Name = RandName();
             Position = RandPos();
+            orderCount = 0;
+        }
+        public Worker(string name, string pos)
+        {
+            Name = name;
+            Position = pos;
             orderCount = 0;
         }
         private string RandName()
@@ -39,6 +46,10 @@ namespace PyroPizza
         public void AppendOrder()
         {
             orderCount++;
+        }
+        public override string ToString()
+        {
+            return Name + " ("+ index.ToString() + ")" ;
         }
     }
 }

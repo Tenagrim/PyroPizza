@@ -190,6 +190,62 @@ namespace PyroPizza
             ClearQueue();
             return cost;
         }
+        public double AppendAllContent(int cnt)
+        {
+            double cost = 0;
+            foreach (var i in Content)
+            {
+                Append(i, cnt);
+                cost += i.Cost * cnt;
+            }
+            return cost;
+        }
+        public double AppendPosition(Product product, int cnt)
+        {
+            double cost = 0;
+            cost = product.Cost * cnt;
+            var selected = from p in Content
+                           where p.Name == product.Name
+                           select p;
+            if (selected.Count() == 0)
+            {
+                product.SetCount(cnt);
+                Content.Add(product);
+            }
+            else
+            {
+                selected.First().SetCount(selected.First().CountOnStorage + cnt);
+            }
+            return cost;
+        }
+        public double AppendAll(int count)
+        {
+            double cost = 0;
+            foreach (var i in Content)
+            {
+                i.Append(count);
+                cost += i.Cost * count;
+            }
+            return cost;
+        }
+        public double AppendPosition(string product, int cnt)
+        {
+            double cost = 0;
+
+            var selected = from p in Content
+                           where p.Name == product
+                           select p;
+
+            if (selected.Count() == 0)
+            {
+                throw new ArgumentException("Продукт не заведен на склад");
+            }
+            else
+            {
+                selected.First().SetCount(selected.First().CountOnStorage + cnt);
+            }
+            return cost;
+        }
         private void ClearQueue()
         {
             List<Product> res = new List<Product>();

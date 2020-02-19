@@ -5,6 +5,7 @@ using System.Text;
 
 namespace PyroPizza
 {
+    [Serializable]
     class Product
     {
         public string Name { get; set; }

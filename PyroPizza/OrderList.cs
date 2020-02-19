@@ -19,5 +19,20 @@ namespace PyroPizza
             o.SetIndex(orders.Count);
             orders.Add(o);
         }
+        public int IncCount()
+        {
+            return orders.Count;                     
+        }
+        public int DoneCount()
+        {
+            var selected = from p in orders
+                           where p.Status == "Выполнен"
+                           select p;
+            return selected.Count();
+        }
+        public int InProgressCount()
+        {
+            return orders.Count - DoneCount();
+        }
     }
 }

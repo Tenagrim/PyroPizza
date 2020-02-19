@@ -10,7 +10,7 @@ namespace PyroPizza
     {
         public List<Worker> Workers { get; }
         public List<string> Positions { get; }
-        public int Count { get { return count; } }
+        public int Count { get { return Workers.Count; } }
         private int count;
         public Staff()
         {
@@ -29,6 +29,12 @@ namespace PyroPizza
             w.SetIndex(count);
             count++;
             Workers.Add(w);
+        }
+        public void DismissWorker(int ind)
+        {
+            //count--;
+            //Workers.RemoveAt(ind);
+            Workers.RemoveAt(Workers.FindIndex(p => p.Index == ind));
         }
     }
 }

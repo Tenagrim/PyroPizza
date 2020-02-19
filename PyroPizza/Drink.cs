@@ -6,6 +6,7 @@ using System.Text;
 
 namespace PyroPizza
 {
+    [Serializable]
     class Drink : MenuPosition
     {
         public double Volume { get; set; }
