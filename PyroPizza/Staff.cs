@@ -9,7 +9,7 @@ namespace PyroPizza
     class Staff
     {
         public List<Worker> Workers { get; }
-        public List<string> Positions { get; }
+        //public List<string> Positions { get; }
         public int Count { get { return Workers.Count; } }
         private int count;
         public Staff()

@@ -22,14 +22,15 @@ namespace PyroPizza
         private void Form1_Shown(object sender, EventArgs e)
         {
             Pizza newPizza = new Pizza();
-            PyroPizza.menu.Add(newPizza);
+            LoadPizzery();
+            //PyroPizza.menu.Add(newPizza);
             menus.Add(listBox1);
             menus.Add(listBox2);
-            LoadMenu(PyroPizza, menus);
-            LoadIndexes(PyroPizza.menu);
+           // LoadMenu(PyroPizza, menus);
+           // LoadIndexes(PyroPizza.menu);
             textBox8.Text = PyroPizza.menu.deliveryCost.ToString();
             curOrder.deliveryCost = PyroPizza.menu.deliveryCost;
-            comboBox4.SelectedIndex = 0;
+            comboBox4.SelectedIndex = 0;        
         }
 
         Pizzery PyroPizza = new Pizzery();
@@ -263,6 +264,10 @@ namespace PyroPizza
         private void button1_Click_1(object sender, EventArgs e)
         {
             LoadMenu(PyroPizza.menu, listBox2);
+            UpdateSelectedIndexes();
+        }
+        private void UpdateSelectedIndexes()
+        {
             selectedIndexes.Clear();
             foreach (var i in PyroPizza.menu.Content)
                 selectedIndexes.Add(i.Index);
@@ -329,7 +334,7 @@ namespace PyroPizza
         private void button9_Click(object sender, EventArgs e)
         {
             if (listBox4.SelectedIndex == -1) { ShowError("Выберите пункт заказа для удаления"); return; }
-            curOrder.RemoveAt(listBox2.SelectedIndex);
+            curOrder.RemoveAt(listBox4.SelectedIndex);
             listBox4.Items.RemoveAt(listBox4.SelectedIndex);
             textBox7.Text = curOrder.Cost + "р.";
         }
@@ -897,6 +902,16 @@ namespace PyroPizza
 
             f1.Close();
 
+            LoadMenu(PyroPizza.menu, listBox2);
+            LoadMenu(PyroPizza.menu, listBox1);
+            UpdateFinReport();
+            UpdateOrderList();
+            UpdateWorkerList();
+            UpdateStorListbox();
+            UpdateDeliveryList();
+            UpdateProdQueqe();
+            curOrder = new Order();
+            UpdateSelectedIndexes();
         }
 
         private void button32_Click(object sender, EventArgs e)
@@ -907,19 +922,17 @@ namespace PyroPizza
         private void button33_Click(object sender, EventArgs e)
         {
             LoadPizzery();
-            LoadMenu(PyroPizza.menu, listBox2);
-            LoadMenu(PyroPizza.menu, listBox1);
-            UpdateFinReport();
-            UpdateOrderList();
-            UpdateWorkerList();
-            UpdateStorListbox();
-            UpdateDeliveryList();
-            UpdateProdQueqe();
+
         }
 
         private void checkBox3_CheckedChanged(object sender, EventArgs e)
         {
             panel6.Visible = checkBox3.Checked;
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            SavePizzery();
         }
     }
 }
